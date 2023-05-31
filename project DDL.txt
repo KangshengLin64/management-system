@@ -1,0 +1,65 @@
+SET NAMES utf8mb4;
+
+-- ----------------------------
+-- Table structure for User
+-- ----------------------------
+DROP TABLE IF EXISTS `User`;
+CREATE TABLE `User` (
+    `userId` int(11) NOT NULL AUTO_INCREMENT,
+    `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+    `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+    `createdTime` datetime(0) NULL DEFAULT NULL,
+    PRIMARY KEY (`userId`) using BTREE
+)ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for Stock
+-- ----------------------------
+DROP TABLE IF EXISTS `Stock`;
+CREATE TABLE `Stock` (
+    `itemId` int(11) NOT NULL AUTO_INCREMENT ,
+    `userId_fk` int(11) NOT NULL,
+    `itemName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `itemType` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `itemQuantity` int(11) NOT NULL,
+    `itemPrice` float NOT NULL,
+    `purchaseCompany` int(11) NOT NULL ,
+    `purchaseDate` datetime(0) NULL DEFAULT NULL ,
+    PRIMARY KEY (`itemId`) using BTREE,
+    FOREIGN KEY (`userId_fk`) REFERENCES `User`(`userId`)
+)ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- -----------------------------
+-- Table structure for Client
+-- -----------------------------
+DROP TABLE IF EXISTS `Client`;
+CREATE TABLE `Client` (
+    `clientId` int(11) NOT NULL AUTO_INCREMENT ,
+    `userId_fk` int(11) NOT NULL,
+    `clientName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `clientAddress` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `phoneNumber` int(11) NOT NULL,
+    `debtTotal` float NOT NULL,
+
+    PRIMARY KEY (`clientId`) using BTREE,
+    FOREIGN KEY (`userId_fk`) REFERENCES `User`(`userId`)
+)ENGINE = InnoDB AUTO_INCREMENT =  1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+-- -----------------------------
+-- Table structure for Invoice
+-- -----------------------------
+
+DROP TABLE IF EXISTS `Invoice`;
+CREATE TABLE `Invoice` (
+    `invoiceId` int(11) NOT NULL AUTO_INCREMENT,
+    `clientId_fk` int(11) NOT NULL,
+    `itemId_fk` int(11) NOT NULL,
+    `amount` float NOT NULL,
+    `paid` BOOL NOT NULL,
+    `paymentMethod` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+    `dueDate` datetime(0) NULL DEFAULT NULL,
+    PRIMARY KEY (`invoiceId`) using BTREE,
+    FOREIGN KEY (`clientId_fk`) REFERENCES `Client`(`clientId`),
+    FOREIGN KEY (`itemId_fk`) REFERENCES `Stock`(`itemId`)
+)ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
